@@ -1,0 +1,3 @@
+name: BulkaLoader
+main: com.planetarypvp.bulka.loader.BulkaLoaderPlugin
+version: 1.0
