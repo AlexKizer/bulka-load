@@ -45,7 +45,7 @@ public class BukkitLoader
             System.out.println("Config file: " + f.getName());
             String fileName = f.getName();
 
-            if(!fileName.endsWith(".yaml"))
+            if(!fileName.endsWith(".yml"))
                 continue;
 
             if(f.isDirectory())
