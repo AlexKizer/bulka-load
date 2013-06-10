@@ -77,16 +77,23 @@ public class BukkitLoader
         load(new File(settings));
     }
 
-    public static void load(ConfigurableClass configurableObject) throws LoadClassException
+    public static void load(ConfigurableClass configurableObject)
     {
         Class<? extends ConfigurableClass> confClass = configurableObject.getClass();
+        String error = "Class " + configurableObject.getClass().getName() + " was not previously loaded into memory. Load method must first be called with a specified settings directory.";
 
         if(!configs.containsKey(confClass.getName()))
-            configurableObject.loadDefaults("Class " + configurableObject.getClass().getName() + " was not previously loaded into memory. Load method must first be called with a specified settings directory.");
+            configurableObject.loadDefaults(error);
 
         YamlConfiguration config = configs.get(confClass.getName());
         ArrayList<Method> annotatedMethods = getAnnotatedMethods(confClass);
-        loadMethods(configurableObject, config, annotatedMethods);
+
+        try {
+            loadMethods(configurableObject, config, annotatedMethods);
+        } catch (LoadClassException e) {
+            e.printStackTrace();
+            configurableObject.loadDefaults(error);
+        }
     }
 
     private static void loadMethods(ConfigurableClass configurableObject, YamlConfiguration config, ArrayList<Method> annotatedMethods) throws LoadClassException

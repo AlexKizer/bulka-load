@@ -1,4 +1,4 @@
-package com.planetarypvp.bulka.loader;
+package com.planetarypvp.bulka.loader.example;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
