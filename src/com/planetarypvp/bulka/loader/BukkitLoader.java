@@ -1,5 +1,9 @@
 package com.planetarypvp.bulka.loader;
 
+import com.planetarypvp.bulka.loader.Configurable;
+import com.planetarypvp.bulka.loader.ConfigurableClass;
+import com.planetarypvp.bulka.loader.LoadClassException;
+import com.planetarypvp.bulka.loader.LoadSettingsException;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -38,9 +42,14 @@ public class BukkitLoader
 
         for(File f : settingsDirectory.listFiles())
         {
+            System.out.println("Config file: " + f.getName());
+            String fileName = f.getName();
+
+            if(!fileName.endsWith(".yaml"))
+                continue;
+
             if(f.isDirectory())
                 getConfigs(f);
-
             else
             {
                 YamlConfiguration config = new YamlConfiguration();
