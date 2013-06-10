@@ -7,5 +7,7 @@ package com.planetarypvp.bulka.loader;
  * Time: 12:24 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface ConfigurableClass {
+public interface ConfigurableClass
+{
+    public void loadDefaults(String message);
 }
