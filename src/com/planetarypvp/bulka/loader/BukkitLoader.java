@@ -32,9 +32,9 @@ public class BukkitLoader
         return new File(plugin.getDataFolder(), settings);
     }
 
-    private static ArrayList<YamlConfiguration> getConfigs(File settingsDirectory) throws IOException, InvalidConfigurationException
+    private static Map<String, YamlConfiguration> getConfigs(File settingsDirectory) throws IOException, InvalidConfigurationException
     {
-        ArrayList<YamlConfiguration> configs = new ArrayList<>();
+        Map<String, YamlConfiguration> configs = new HashMap<>();
 
         for(File f : settingsDirectory.listFiles())
         {
@@ -44,10 +44,10 @@ public class BukkitLoader
             else
             {
                 YamlConfiguration config = new YamlConfiguration();
-                    config.load(f);
+                config.load(f);
 
                 if(config.get("class") != null)
-                    configs.add(config);
+                    configs.put((String) config.get("class"), config);
             }
         }
 
@@ -59,10 +59,9 @@ public class BukkitLoader
         if(!settingsDirectory.exists())
             throw new LoadSettingsException("Specified settings directory does not exist.");
 
-        ArrayList<YamlConfiguration> _configs;
 
         try {
-            _configs = getConfigs(settingsDirectory);
+            configs = getConfigs(settingsDirectory);
         } catch (IOException e) {
             e.printStackTrace();
             throw new LoadSettingsException("Could not access a file in the settings directory");
@@ -83,7 +82,10 @@ public class BukkitLoader
         String error = "Class " + configurableObject.getClass().getName() + " was not previously loaded into memory. Load method must first be called with a specified settings directory.";
 
         if(!configs.containsKey(confClass.getName()))
+        {
             configurableObject.loadDefaults(error);
+            return;
+        }
 
         YamlConfiguration config = configs.get(confClass.getName());
         ArrayList<Method> annotatedMethods = getAnnotatedMethods(confClass);
